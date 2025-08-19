@@ -83,3 +83,9 @@ Skills Learned
      Base project for advanced intrusion detection or monitoring tools
 
 ✅ This makes your project a hands-on security exercise showing how to build and manage a firewall from scratch, not just using a prebuilt GUI.
+
+
+
+
+<img width="1343" height="551" alt="task 12025-08-19 18-47-58" src="https://github.com/user-attachments/assets/472fc77f-d9b9-492a-9e61-19b52eb7b695" />
+
