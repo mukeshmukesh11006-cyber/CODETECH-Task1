@@ -1,0 +1,55 @@
+sudo iptables -F
+sudo iptables -X
+sudo iptables -t nat -F
+sudo iptables -t nat -X
+
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUTPUT DROP
+
+sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A OUTPUT -o lo -j ACCEPT
+
+sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+sudo iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+
+ed: " --log-level 4PUT -j LOG --log-prefix "IPTables-Dropp
+
+sudo apt install iptables-persistent -y
+sudo netfilter-persistent save
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+iptables-persistent is already the newest version (1.0.20).
+The following packages were automatically installed and are no longer required:
+  gir1.2-javascriptcoregtk-4.0 gir1.2-soup-2.4
+  gir1.2-webkit2-4.0 libsoup-gnome2.4-1
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 67 not upgraded.
+run-parts: executing /usr/share/netfilter-persistent/plugins.d/15-ip4tables save
+run-parts: executing /usr/share/netfilter-persistent/plugins.d/25-ip6tables save
+
+sudo iptables -L -v
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  lo     any     anywhere             anywhere            
+    0     0 ACCEPT     all  --  any    any     anywhere             anywhere             ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp spt:http
+    0     0 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp spt:https
+    0     0 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:ssh
+    0     0 LOG        all  --  any    any     anywhere             anywhere             LOG level warn prefix "IPTables-Dropped: "
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy DROP 11 packets, 836 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  any    lo      anywhere             anywhere            
+    0     0 ACCEPT     all  --  any    any     anywhere             anywhere             ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     udp  --  any    any     anywhere             anywhere             udp dpt:domain
+    0     0 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:http
+    0     0 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:https
+    0     0 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp spt:ssh
+
