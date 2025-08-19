@@ -77,10 +77,7 @@ Skills Learned
 
      Logging and monitoring dropped packets
 
-Use Cases
-
-     Personal workstation protection
-
+     
      Security lab experiments in Parrot OS
 
      Base project for advanced intrusion detection or monitoring tools
